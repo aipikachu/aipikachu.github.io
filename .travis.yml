@@ -1,36 +1,51 @@
-sudo: required
-# before_script:
-#   - apt-get update -qq&&apt-get install -y -qq pandoc
+# 指定语言环境
 language: node_js
+# 指定需要sudo权限
+sudo: required
+# 指定node_js版本
 node_js: stable
-branches:
-  only:
-  - blog_source
+
+# 指定缓存模块，可选。缓存可加快编译速度。
 cache:
   directories:
-  - node_modules
-before_install:
-- npm install -g hexo-cli
-install:
-- npm install
-- npm uninstall hexo-renderer-pandoc --save
-- npm uninstall hexo-renderer-marked --save
-- npm install hexo-renderer-kramed --save
-- npm uninstall hexo-math --save
-- npm install hexo-renderer-mathjax --save
-- npm install hexo-abbrlink --save
-- npm install hexo-deployer-git --save
-- npm install hexo-generator-feed --save
-script:
-- hexo clean
-- hexo generate
-after_success:
-- rm -rf .deploy_git
-- git config --global user.name "Vincent Zhang"
-- git config --global user.email "zhangwya@gmail.com"
-- sed -i'' "s~git@github.com:aipikachu/aipikachu.github.io.git~https://${REPO_TOKEN}@github.com/aipikachu/aipikachu.github.io.git~" _config.yml
-- hexo clean
-- hexo g -d
+    - node_modules
+
+# 指定博客的仓库地址
 env:
-  global:
-    secure: E9pHqATcadN4r8193n3MjIBAX+wGtYAGdLI4xWgMgiQhUQMCXYxwIqlyTeBuylBdG4U6ftrdedsgQaE+OBAOWjsKB+fx30ccqQw5UhyoYZM7CF27Ro8Fr6L1x4wOPgPbgzntu7x86ut7Px9AIsCTGwpJvrhjR8ypwFAnRwAPou1Z+4nMfVhg9R2Kss+CU5Iyq0nbhU4VnhwTv60KSfKSVwsp6dB8qdsUf0C1G54t7hImkCIkuvZbPcPtIqzwvkiFT7b+zbXhC1Natz4TyKlz2/LW5S93+nCdP1aEKjPW/EYFBOKLCsOCsJCAWNaXWd3f5XNwH6GUcZdQAXq2983RVJozCHgQ0GBMjkXg6n5iD8jWJJJeup+w1NrLpLWFhDl59jS8Y9bCR4JE03rjbdEnVGbp3Yxcx3n8EHsKJXhjEjXEPZQbJM8KvKJ9xdNwB3pXAu3Lapny2P2/07Z7OuukMrSVs1r1aMQ6OGmc1LV1C4Bbaq02HbtdhGckPIogqYZOkCrkVjMaRN0vlei2wsy9iSF2saCbLiOjuP5Aeh94ZrV0pRvdufwUd7RvnHnASCxUCYmoiIFEkThfwXl8X52F4Kr9CcROuIoFazcNXhL7vmDIn7HpBhYn+4cMelReLnlsCEN/PaGC+MHMDl6qoRrrCTnkfgCwt0Rn30m3bfZlxCM=
+ global:
+   - GH_REF: github.com/aipikachu/aipikachu.github.io.git
+
+# 指定博客源码分支，blog_source.
+branches:
+  only:
+    - blog_source
+
+before_install:
+  - npm install -g hexo-cli
+
+install:
+  - npm install
+  - npm uninstall hexo-renderer-pandoc --save
+  - npm uninstall hexo-renderer-marked --save
+  - npm install hexo-renderer-kramed --save
+  - npm uninstall hexo-math --save
+  - npm install hexo-renderer-mathjax --save
+  - npm install hexo-abbrlink --save
+  - npm install hexo-deployer-git --save
+  - npm install hexo-generator-feed --save
+
+# 执行清缓存，生成网页操作
+script:
+  - hexo clean
+  - hexo generate
+
+# 设置git提交名，邮箱；替换真实token到_config.yml文件，最后depoy部署
+after_script:
+  - cd ./public
+  - git init
+  - git config user.name "Vincent Zhang"
+  - git config user.email "zhangwya@gmail.com"
+  - git add .
+  - git commit -m "Update myblog docs."
+  - git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:master
+
