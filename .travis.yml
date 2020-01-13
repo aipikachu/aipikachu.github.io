@@ -13,7 +13,7 @@ cache:
 # 指定博客的仓库地址
 env:
  global:
-   - GH_REF: github.com/aipikachu/aipikachu.github.io.git
+   - GH_REF2: github.com/aipikachu/aipikachu.github.io.git
 
 # 指定博客源码分支，blog_source.
 branches:
@@ -57,6 +57,6 @@ after_script:
   - git config user.email "zhangwya@gmail.com"
   # - git add .
   # - git commit -m "Update myblog docs."
-  - sed -i'' "s~git@github.com:aipikachu/aipikachu.github.io.git~https://${GH_TOKEN}@${GH_REF}~" _config.yml
+  - sed -i'' "s~git@github.com:aipikachu/aipikachu.github.io.git~https://${GH_TOKEN2}@${GH_REF}~" _config.yml
   - hexo g -d
 
