@@ -39,13 +39,24 @@ script:
   - hexo clean
   - hexo generate
 
+# # 设置git提交名，邮箱；替换真实token到_config.yml文件，最后depoy部署
+# after_script:
+#   - cd ./public
+#   - git init
+#   - git config user.name "Vincent Zhang"
+#   - git config user.email "zhangwya@gmail.com"
+#   - git add .
+#   - git commit -m "Update myblog docs."
+#   - git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:master
+
 # 设置git提交名，邮箱；替换真实token到_config.yml文件，最后depoy部署
 after_script:
-  - cd ./public
-  - git init
+  # - cd ./public
+  # - git init
   - git config user.name "Vincent Zhang"
   - git config user.email "zhangwya@gmail.com"
-  - git add .
-  - git commit -m "Update myblog docs."
-  - git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:master
+  # - git add .
+  # - git commit -m "Update myblog docs."
+  - sed -i'' "s~git@github.com:aipikachu/aipikachu.github.io.git~https://${GH_TOKEN}@${GH_REF}~" _config.yml
+  - hexo g -d
 
