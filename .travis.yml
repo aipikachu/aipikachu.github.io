@@ -57,6 +57,6 @@ after_script:
   - git config user.email "zhangwya@gmail.com"
   # - git add .
   # - git commit -m "Update myblog docs."
-  - sed -i'' "s~git@github.com:aipikachu/aipikachu.github.io.git~https://${GH_TOKEN2}@${GH_REF}~" _config.yml
+  - sed -i'' "s~git@github.com:aipikachu/aipikachu.github.io.git~https://${GH_TOKEN2}@${GH_REF2}~" _config.yml
   - hexo g -d
 
