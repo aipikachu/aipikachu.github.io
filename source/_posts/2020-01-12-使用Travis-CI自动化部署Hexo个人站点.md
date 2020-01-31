@@ -28,10 +28,13 @@ hexo d
 
 * [Automatically Deploy Hexo With Travis CI](https://maologue.com/Auto-deploy-Hexo-with-Travis-CI/)
 * [Hexo遇上Travis-CI：可能是最通俗易懂的自动发布博客图文教程](https://juejin.im/post/5a1fa30c6fb9a045263b5d2a)
-<!-- * [使用LaTex添加公式到Hexo博客里](https://blog.csdn.net/Aoman_Hao/article/details/81381507) -->
 
 下面开始，逐一记录关键操作流程。
 
 ### 关于Travis-CI
 
 [**Travis CI**](https://travis-ci.org)是一个目前新兴的开源持续集成项目，通过执行预先设定的脚本完成相应的部署。
+
+当我们每次执行`git push`命令提交修改至远程仓库时，`Travis CI`会自动检测我们的提交，然后根据配置文件`.travis.yml`帮我们自动生成、部署静态网页。
+
+
