@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>近期的记录</title>
+    <url>/posts/2d37f022/</url>
+    <content><![CDATA[<p>有一段没有更新了。这里记录一下最近的一些……</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>使用Travis CI自动化部署Hexo个人站点</title>
+    <url>/posts/1913110b/</url>
+    <content><![CDATA[<p>在刚开始使用Hexo+Github Pages搭建个人博客时，都是先在本地写好文章，再通过终端输入如下命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo g</span><br><span class="line">hexo d</span><br></pre></td></tr></table></figure>
+<p>将新文章部署到Github Pages上去。初始时并未有什么不方便。</p>
+<a id="more"></a>
+<p>但是，以上的操作要求写文章的机器上必须需要安装hexo和Node.js环境。然而当随着使用的频繁，会发现当更换一台电脑（比如出差或者旧电脑损坏）之后，想要写博客，就需要重新安装并配置博客环境（尤其当在之前的机器上对配置做了一些内部的修改之后），经常就会发现，配置起来很繁琐，而且某些当时的配置（比如我个人对在网页上进行<code>latex</code>支持的配置，可见我的博文<a href="https://aipikachu.me/posts/2631/">在Hexo的Next主题中支持Latex</a>）很难忆起做过什么修改的时候。这时就会迫切的需要能够有某种有效的方案来替代。</p>
+<p>稍稍Google一下，发现原来这个问题早就有了，采用持续集成(<strong>C</strong>ontinuous <strong>I</strong>ntegration，简记为CI)的方法，来实现自动编译和发布代码（文本）。其中一种比较常用的方法是采用<a href="https://travis-ci.org" target="_blank" rel="noopener">Travis CI</a>持续集成的方案，实现个人博客的自动化部署。本文则是简单总结一下从网上学习的采用Travis CI自动化部署Hexo个人站点的流程，作为个人笔记。</p>
+<p><strong><em>特别说明:</em></strong> 本文主要参考以下文章</p>
+<ul>
+<li><a href="https://maologue.com/Auto-deploy-Hexo-with-Travis-CI/" target="_blank" rel="noopener">Automatically Deploy Hexo With Travis CI</a></li>
+<li><a href="https://juejin.im/post/5a1fa30c6fb9a045263b5d2a" target="_blank" rel="noopener">Hexo遇上Travis-CI：可能是最通俗易懂的自动发布博客图文教程</a></li>
+</ul>
+<p>下面开始，逐一记录关键操作流程。</p>
+<h3 id="关于Travis-CI"><a href="#关于Travis-CI" class="headerlink" title="关于Travis-CI"></a>关于Travis-CI</h3><p><a href="https://travis-ci.org" target="_blank" rel="noopener"><strong>Travis CI</strong></a>是一个目前新兴的开源持续集成项目，通过执行预先设定的脚本完成相应的部署。</p>
+<p>当我们每次执行<code>git push</code>命令提交修改至远程仓库时，<code>Travis CI</code>会自动检测我们的提交，然后根据配置文件<code>.travis.yml</code>帮我们自动生成、部署静态网页。</p>
+]]></content>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>Travis CI</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>在阿里云服务器运行Jupyter Notebook</title>
+    <url>/posts/23962/</url>
+    <content><![CDATA[<p><strong>声明</strong>：本文是在其他人的方法上的摘要总结，主要是作为供个人使用的备忘记录。本文主要参考如下文章：</p>
+<ul>
+<li><a href="https://yq.aliyun.com/articles/441132" target="_blank" rel="noopener">远程访问jupyter notebook</a></li>
+<li><a href="https://blog.csdn.net/sinat_28442665/article/details/85612475" target="_blank" rel="noopener">远程访问阿里云服务器jupyter</a></li>
+</ul>
+<p><code>Jupyter notebook</code>是一个基于浏览器的<code>python</code>数据分析工具，方便易用。最简单的方法是通过<a href="https://anaconda.org" target="_blank" rel="noopener"><code>Anaconda</code></a>来安装，<code>Anaconda</code>中集成了丰富的第三方<code>python</code>库，使用简单。具体的安装方法不再赘述。</p>
+<a id="more"></a>
+<p>安装完成之后，在终端键入<code>jupyter notebook</code>便可以在本地浏览器中使用。但是，默认的运行方式下，只能够是在本地的浏览器中访问。所以，对于拥有服务器的人们来说，为了能够远程访问安装在服务器端的<code>Jupyter notebook</code>，则是需要做一些额外的配置。在参考其他人的方法后，做简要摘要记录如下。</p>
+<h3 id="生成jupyter-notebook配置文件"><a href="#生成jupyter-notebook配置文件" class="headerlink" title="生成jupyter notebook配置文件"></a>生成<code>jupyter notebook</code>配置文件</h3><p>在终端键入如下命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jupyter notebook --generate-config</span><br></pre></td></tr></table></figure>
+<p>此时，即会生成新的配置文件（默认名称为<code>jupyter_notebook_config.py</code>），一般位于<code>/root/.jupyter</code>目录。</p>
+<h3 id="设置Jupyetr登陆密码，生成密文"><a href="#设置Jupyetr登陆密码，生成密文" class="headerlink" title="设置Jupyetr登陆密码，生成密文"></a>设置<code>Jupyetr</code>登陆密码，生成密文</h3><p>终端键入：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ipython</span><br></pre></td></tr></table></figure>
+<p>并依次键入：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">from notebook.auth import passwd</span><br><span class="line">passwd()</span><br></pre></td></tr></table></figure>
+<p>在后续窗口中，键入密码，并再次确认输入密码（说明：键入密码时，在窗口中不会显示任何内容）</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Enter password:</span><br><span class="line">Verify password:</span><br></pre></td></tr></table></figure>
+<p>两次键入密码无误后，一般会生成密文密钥，形式如下所示：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Out[2]: <span class="string">'sha1:ce00......'</span></span><br></pre></td></tr></table></figure>
+<p>将密文<code>&#39;sha1:ce00......&#39;</code>复制下来。</p>
+<h3 id="修改默认配置文件"><a href="#修改默认配置文件" class="headerlink" title="修改默认配置文件"></a>修改默认配置文件</h3><p>默认的配置文件一般位于<code>/root/.jupyter/jupyter_notebook_config.py</code>。在终端键入</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim /root/.jupyter/jupyter_notebook_config.py</span><br></pre></td></tr></table></figure>
+<p>将其中的如下部分内容修改为如下所示形式：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">c.NotebookApp.ip = <span class="string">'*'</span></span><br><span class="line">c.NotebookApp.password = u<span class="string">'sha1:ce00...刚才复制的那个密文内容'</span></span><br><span class="line">c.NotebookApp.open_browser = False</span><br><span class="line">c.NotebookApp.port = 8888 <span class="comment">#随便指定一个端口</span></span><br><span class="line">c.NotebookApp.allow_remote_access = True</span><br></pre></td></tr></table></figure>
+<h3 id="启动Jupyter"><a href="#启动Jupyter" class="headerlink" title="启动Jupyter"></a>启动Jupyter</h3><p>至此，配置基本完成，在终端键入：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jupyter notebook</span><br></pre></td></tr></table></figure>
+<p>即可在本地浏览器直接访问<code>http://address_of_remote:8888</code>就可以看到jupyter的登陆界面，键入密码之后就可以访问服务器上的<code>Jupyter notebook</code>了。</p>
+<h3 id="进一步：将Jupyter服务器作为一个后台的服务，始终启动"><a href="#进一步：将Jupyter服务器作为一个后台的服务，始终启动" class="headerlink" title="进一步：将Jupyter服务器作为一个后台的服务，始终启动"></a>进一步：将<code>Jupyter</code>服务器作为一个后台的服务，始终启动</h3><p>但是在上面的设置中还存在一个问题，就是一旦关闭终端，<code>Jupyter</code>程序也就终止了运行。这是由于该<code>Jupyter</code>程序是作为当前终端的一个子进程，在用户终端关闭的时候将收到一个<code>hangup</code>信号，从而使得<code>Jupyter</code>程序被关闭。</p>
+<p>为了让程序能忽视<code>hangup</code>信号，可以使用<code>nohup</code>命令。同时需要配合<code>&amp;</code>来将程序放入后台中运行。在终端键入如下命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">nohup jupyter notebook --allow-root &amp;</span><br></pre></td></tr></table></figure>
+<p>此时会在当前目录生成一个nohup.out文件，可以看作是程序的输出日志文件。如果要查看该日志文件，只需在终端键入：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tail -fn 50 nohup.out</span><br></pre></td></tr></table></figure>
+<p>但是，如果需要查看，或者终止由<code>nohup</code>提交到后台运行的程序的话，则需要额外的命令辅助。首先是查看后台运行的程序，在终端键入：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ps ux</span><br></pre></td></tr></table></figure>
+<p>即可在终端中显示当前后台运行的的程序号PID。若要终止某一程序的话，只需要在终端中键入：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">kill</span> -9 10259   <span class="comment"># 其中，10259为该进程的PID号</span></span><br></pre></td></tr></table></figure>
+<p>至此，常规设置结束。再次强调，本文仅是作为本人备忘记录使用。</p>
+]]></content>
+      <tags>
+        <tag>Jupyter Notebook</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>QuCumber使用记录</title>
+    <url>/posts/13048/</url>
+    <content><![CDATA[<h4 id="写在最前"><a href="#写在最前" class="headerlink" title="写在最前"></a>写在最前</h4><p>这里简要记录一些使用<a href="https://qucumber.readthedocs.io/" target="_blank" rel="noopener">QuCumber</a>（<strong>QuCumber</strong>，A <strong>Qu</strong>antum <strong>C</strong>alculator <strong>U</strong>sed for <strong>M</strong>any-<strong>b</strong>ody <strong>E</strong>igenstate <strong>R</strong>econstruction的简称，一个基于python的用于多体波函数重建的机器学习库）做量子多体波函数重建的例子。</p>
+<h3 id="安装与初步使用"><a href="#安装与初步使用" class="headerlink" title="安装与初步使用"></a>安装与初步使用</h3><p>下载安装方法参见QuCumber的<a href="https://qucumber.readthedocs.io/en/stable/installation.html" target="_blank" rel="noopener">官方文档</a>。使用例子也可参见。</p>
+]]></content>
+      <tags>
+        <tag>QuCumber</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>532nm倍频腔调整记录</title>
+    <url>/posts/20410/</url>
+    <content><![CDATA[<h2 id="替换放大器的种子光"><a href="#替换放大器的种子光" class="headerlink" title="替换放大器的种子光"></a>替换放大器的种子光</h2><p>使用Mephisto替换原先使用的NP Photonics种子光。放大器出光的噪声有显著抑制。</p>
+<h2 id="倍频腔出光"><a href="#倍频腔出光" class="headerlink" title="倍频腔出光"></a>倍频腔出光</h2>]]></content>
+  </entry>
+  <entry>
+    <title>在Hexo的Next主题中支持Latex</title>
+    <url>/posts/2631/</url>
+    <content><![CDATA[<p><strong>声明</strong>：本文参考如下文章：</p>
+<ul>
+<li><a href="https://blog.csdn.net/wgshun616/article/details/81019687" target="_blank" rel="noopener">Hexo 的 Next 主题中渲染 MathJax 数学公式</a></li>
+<li><a href="https://blog.csdn.net/u014630987/article/details/78670258" target="_blank" rel="noopener">如何在 hexo 中支持 Mathjax？</a></li>
+<li><a href="https://blog.csdn.net/Aoman_Hao/article/details/81381507" target="_blank" rel="noopener">使用LaTex添加公式到Hexo博客里</a></li>
+</ul>
+<p>在Hexo中的Next主题中默认是不支持 <code>Latex</code> 的，但是可以通过安装第三方库来解决这一问题。具体的方法如下。</p>
+<a id="more"></a>
+<h3 id="第一步：替换Marked渲染引擎"><a href="#第一步：替换Marked渲染引擎" class="headerlink" title="第一步：替换Marked渲染引擎"></a>第一步：替换Marked渲染引擎</h3><p>Hexo默认的渲染引擎是marked，但marked渲染引擎不支持mathjax公式输出。而在marked的基础上进行修改得到的kramed渲染引擎则是支持mathjax公式输出的。更换方法如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm uninstall hexo-renderer-marked --save</span><br><span class="line">npm install hexo-renderer-kramed --save</span><br></pre></td></tr></table></figure>
+<p>同时，需要对博客根目录下的kramed的配置文件做一些修改，方法是打开<code>/node_modules/hexo-renderer-kramed/lib/renderer.js</code>（注：此为Linux系统下文件路径的格式，在Windows系统下文件路径分隔符为<code>\</code>而不是<code>/</code>）文件，将其中的如下代码块</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Change inline math rule</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">formatText</span>(<span class="params">text</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// Fit kramed's rule: $$ + \1 + $$</span></span><br><span class="line">  <span class="keyword">return</span> text.replace(<span class="regexp">/`\$(.*?)\$`/g</span>, <span class="string">'$$$$$1$$$$'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>修改为：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Change inline math rule</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">formatText</span>(<span class="params">text</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// Fit kramed's rule: $$ + \1 + $$</span></span><br><span class="line">  <span class="keyword">return</span> text</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="第二步：安装mathjax"><a href="#第二步：安装mathjax" class="headerlink" title="第二步：安装mathjax"></a>第二步：安装mathjax</h3><p>如果已经安装<code>hexo-math</code>，需要先卸载，命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm uninstall hexo-math --save</span><br></pre></td></tr></table></figure>
+<p>然后，再安装<code>hexo-renderer-mathjax</code>包，命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm install hexo-renderer-mathjax --save</span><br></pre></td></tr></table></figure>
+<p>接下来，则需要更新<code>Mathjax</code>中的<strong>CDN</strong>链接。方法是在博客根目录下，打开<code>/node_modules/hexo-renderer-mathjax/mathjax.html</code>文件，将其中的代码：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>修改为</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="第三步：解决语义冲突"><a href="#第三步：解决语义冲突" class="headerlink" title="第三步：解决语义冲突"></a>第三步：解决语义冲突</h3><p>需要指出的是，LaTeX与markdown的语法有语义上的冲突，在hexo中默认的转义规则会将一些字符进行转义。比如在markdown语法中，下划线<code>_</code>代表斜体，会被渲染引擎处理为<code>&lt;em&gt;</code>标签。而Latex格式书写的数学公式下划线<code>_</code>表示下标，有特殊的含义，如果被强制转换为<code>&lt;em&gt;</code>标签，那么MathJax引擎在渲染数学公式的时候就会出错。类似的语义冲突的符号还包括<code>*</code>，<code>{</code>，<code>}</code>，<code>\\</code>等。</p>
+<p>语义冲突的方法如下，在博客的根目录下，打开<code>/node_modules/kramed/lib/rules/inline.js</code>文件，首先找到<code>escape</code>字段（一般在第11行），将其中的内容由如下形式：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">escape</span>: <span class="regexp">/^\\([\\`*&#123;&#125;\[\]()#$+\-.!_&gt;])/</span>,</span><br></pre></td></tr></table></figure>
+<p>修改为：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">escape</span>: <span class="regexp">/^\\([`*\[\]()#$+\-.!_&gt;])/</span>,</span><br></pre></td></tr></table></figure>
+<p>这一步是在原基础上取消了对<code>\</code>，<code>{</code>，<code>}</code>的转义。另外，还要修改该文件中的<code>em</code>字段（一般在第20行），将其中的内容由如下形式：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">em: <span class="regexp">/^\b_((?:__|[\s\S])+?)_\b|^\*((?:\*\*|[\s\S])+?)\*(?!\*)/</span>,</span><br></pre></td></tr></table></figure>
+<p>修改为：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">em: <span class="regexp">/^\*((?:\*\*|[\s\S])+?)\*(?!\*)/</span>,</span><br></pre></td></tr></table></figure>
+<p>重新启动hexo（先clean再generate），应该就可以了。</p>
+<h3 id="第四步：开启Mathjax支持"><a href="#第四步：开启Mathjax支持" class="headerlink" title="第四步：开启Mathjax支持"></a>第四步：开启Mathjax支持</h3><p>在Next主题的<code>_config.yml</code>中开启Mathjax。打开<code>_config.yml</code>文件，找到找到<code>mathjax</code>字段，将默认的<code>false</code>修改为<code>true</code>。并更新其中<strong>cdn</strong>的<strong>url</strong>。更新后的内容如下：</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># MathJax Support</span></span><br><span class="line"><span class="attr">mathjax:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">per_page:</span> <span class="literal">true</span></span><br><span class="line">  <span class="comment"># cdn: //cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML</span></span><br><span class="line">  <span class="attr">cdn:</span> <span class="string">//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML</span></span><br></pre></td></tr></table></figure>
+<p>至此，即可在Hexo中开启Latex支持。另外，可在每次需要用LaTeX渲染的博文中，在文章的Front-matter里打开mathjax开关，具体示例如下：</p>
+<figure class="highlight md"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: Testing Mathjax with Hexo</span><br><span class="line">date: 2019-06-07 14:44:09</span><br><span class="line">category: xxx</span><br><span class="line">mathjax: true</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+<p>做一个测试，Latex语句如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">\begin&#123;equation&#125;</span><br><span class="line">\left\&#123;</span><br><span class="line">\begin&#123;array&#125;&#123;lr&#125;</span><br><span class="line">x&#x3D;\dfrac&#123;3\pi&#125;&#123;2&#125;(1+2t)\cos(\dfrac&#123;3\pi&#125;&#123;2&#125;(1+2t)), &amp; \\</span><br><span class="line">y&#x3D;s, &amp; 0 \leq s \leq L,|t| \leq1. \\</span><br><span class="line">z&#x3D;\dfrac&#123;3\pi&#125;&#123;2&#125;(1+2t)\sin(\dfrac&#123;3\pi&#125;&#123;2&#125;(1+2t)), &amp;  </span><br><span class="line">\end&#123;array&#125;</span><br><span class="line">\right.</span><br><span class="line">\end&#123;equation&#125;</span><br></pre></td></tr></table></figure>
+<p>渲染效果如下：</p>
+<p>\begin{equation}<br>\left\{<br>\begin{array}{lr}<br>x=\dfrac{3\pi}{2}(1+2t)\cos(\dfrac{3\pi}{2}(1+2t)), &amp; \\<br>y=s, &amp; 0 \leq s \leq L,|t| \leq1. \\<br>z=\dfrac{3\pi}{2}(1+2t)\sin(\dfrac{3\pi}{2}(1+2t)), &amp;<br>\end{array}<br>\right.<br>\end{equation}</p>
+]]></content>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>Next</tag>
+        <tag>Latex</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Yao.jl 学习记录</title>
+    <url>/posts/10369/</url>
+    <content><![CDATA[<p>本文是关于<code>Julia</code>编程语言中一个关于量子计算的程序包<a href="https://quantumbfs.github.io/Yao.jl/dev/" target="_blank" rel="noopener"><code>Yao.jl</code></a>的安装与简单使用一些小结，供后续的参考。</p>
+<h2 id="关于Yao-jl的安装"><a href="#关于Yao-jl的安装" class="headerlink" title="关于Yao.jl的安装"></a>关于<code>Yao.jl</code>的安装</h2><p>参见<a href="https://quantumbfs.github.io/Yao.jl/dev/" target="_blank" rel="noopener"><code>Yao.jl</code></a>!</p>
+<h2 id="一维纠缠态的制备的思路"><a href="#一维纠缠态的制备的思路" class="headerlink" title="一维纠缠态的制备的思路"></a>一维纠缠态的制备的思路</h2><p>这里尝试使用<code>Yao.jl</code>模拟估算制备一维纠缠链（假设链的长度为10）的过程。</p>
+<a id="more"></a>
+<h3 id="初态表述"><a href="#初态表述" class="headerlink" title="初态表述"></a>初态表述</h3><p>首先是初态为$|\uparrow \downarrow \uparrow \downarrow \uparrow \downarrow \uparrow \downarrow \uparrow \downarrow&gt;$，下面取$|0&gt;$表示$|\uparrow&gt;$，$|1&gt;$表示$|\downarrow&gt;$。相应的矩阵表示形式为</p>
+<script type="math/tex; mode=display">
+|0> = \left(
+    \begin{array}{c}
+    1 \\
+    0
+    \end{array}
+    \right)</script><script type="math/tex; mode=display">
+|1> = \left(
+    \begin{array}{c}
+    0 \\
+    1
+    \end{array}
+    \right)</script><p>于是有</p>
+<script type="math/tex; mode=display">
+|01> = \left(
+    \begin{array}{c}
+    1 \\
+    0
+    \end{array}
+    \right)
+    \bigotimes
+    \left(
+    \begin{array}{c}
+    0 \\
+    1
+    \end{array}
+    \right)
+    =
+    \left(
+    \begin{array}{c}
+    0 \\
+    1 \\
+    0 \\
+    0
+    \end{array}
+    \right)</script><p>此时，初态表示为$|0101010101&gt;$。</p>
+<h3 id="sqrt-mathrm-SWAP-门"><a href="#sqrt-mathrm-SWAP-门" class="headerlink" title="$\sqrt{ \mathrm{SWAP} }$门"></a>$\sqrt{ \mathrm{SWAP} }$门</h3><p>在制备纠缠链的过程中，首先要对临近两个比特之间做$\sqrt{ \mathrm{SWAP} }$门操作，$\sqrt{ \mathrm{SWAP} }$的矩阵表示形式为</p>
+<script type="math/tex; mode=display">
+\sqrt{ \mathrm{SWAP} } = \left(
+    \begin{array}{cccc}
+    1 & 0 & 0 & 0 \\
+    0 & \frac{1-i}{2} & \frac{1+i}{2} & 0 \\
+    0 & \frac{1+i}{2} & \frac{1-i}{2} & 0 \\
+    0 & 0 & 0 & 1
+    \end{array}\right)</script><p>有</p>
+<script type="math/tex; mode=display">
+\begin{array}{ccl}
+\sqrt{ \mathrm{SWAP} } \times |01> & = & \left(
+    \begin{array}{cccc}
+    1 & 0 & 0 & 0 \\
+    0 & \frac{1-i}{2} & \frac{1+i}{2} & 0 \\
+    0 & \frac{1+i}{2} & \frac{1-i}{2} & 0 \\
+    0 & 0 & 0 & 1
+    \end{array}\right)
+    \times
+    \left(
+    \begin{array}{c}
+    0 \\
+    1 \\
+    0 \\
+    0
+    \end{array}
+    \right) \\
+    {} & = & \left(
+    \begin{array}{c}
+    0 \\
+    \frac{1-i}{2} \\
+    \frac{1+i}{2} \\
+    0
+    \end{array}
+    \right) \\
+    {} & = & \frac{1-i}{2}
+    \left(
+    \begin{array}{c}
+    1 \\
+    0
+    \end{array}
+    \right)
+    \bigotimes
+    \left(
+    \begin{array}{c}
+    0 \\
+    1
+    \end{array}
+    \right) + \frac{1+i}{2}
+    \left(
+    \begin{array}{c}
+    0 \\
+    1
+    \end{array}
+    \right)
+    \bigotimes
+    \left(
+    \begin{array}{c}
+    1 \\
+    0
+    \end{array}
+    \right) \\
+    {} & = & \frac{1-i}{2} |01> + \frac{1+i}{2} |10> \\
+    {} & = &
+    \frac{1-i}{2} (|01> - i |10>)
+\end{array}</script><h3 id="STO过程"><a href="#STO过程" class="headerlink" title="STO过程"></a>STO过程</h3><p>上述量子态与最大两体纠缠态—Bell态，仅相差一个$i$相位因子。所以，接下来需要用到一个STO过程，将其中的$i$相位因子演化去除掉。该STO过程的矩阵表示为</p>
+<script type="math/tex; mode=display">
+\mathrm{STO} = \left(
+    \begin{array}{c}
+    1 & 0 & 0 & 0 \\
+    0 & 1 & 0 & 0 \\
+    0 & 0 & -i & 0 \\
+    0 & 0 & 0 & 1
+    \end{array}
+    \right)</script><p>此时有</p>
+<script type="math/tex; mode=display">
+\begin{array}{ccl}
+\mathrm{STO} \times \sqrt{ \mathrm{SWAP} } \times |01>
+& = & \frac{1-i}{2} \left(
+    \begin{array}{c}
+    0 \\ 1 \\ 1 \\ 0
+    \end{array}
+    \right) \\
+    {} & = & \frac{1-i}{2} (|01> + |10>) \\
+    \end{array}</script><p>通过这两步操作，即可实现了相邻两个比特之间的最大纠缠态。</p>
+<h3 id="一维纠缠链的实现"><a href="#一维纠缠链的实现" class="headerlink" title="一维纠缠链的实现"></a>一维纠缠链的实现</h3><p>通过前面的过程可实现相邻两比特之间的纠缠，即1与2、3与4、……、9与10，接下来，则是对2与3、4与5、……、8与9做类似上述的操作。次番操作之后，即可制备一维纠缠链。</p>
+<h2 id="利用Yao-jl模拟上述纠缠链制备的过程"><a href="#利用Yao-jl模拟上述纠缠链制备的过程" class="headerlink" title="利用Yao.jl模拟上述纠缠链制备的过程"></a>利用<code>Yao.jl</code>模拟上述纠缠链制备的过程</h2><p>首先需要在<code>Julia</code>中倒入<code>Yao.jl</code>库及其他库（比如画图的<code>Plots</code>库），形式如下：</p>
+<figure class="highlight julia"><table><tr><td class="code"><pre><span class="line"><span class="keyword">using</span> Yao</span><br><span class="line"><span class="keyword">using</span> Plots</span><br></pre></td></tr></table></figure>
+<p>接下来是定义前文提到的$\sqrt{ \mathrm{SWAP} }$门和STO过程的算符（分别标记为sqrtSWAP和stoPhase），如下：</p>
+<figure class="highlight julia"><table><tr><td class="code"><pre><span class="line"><span class="meta">@const_gate</span> sqrtSWAP::ComplexF64 = [<span class="number">1</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span>;<span class="number">0</span> (<span class="number">1</span>-<span class="number">1</span><span class="literal">im</span>)/<span class="number">2</span> (<span class="number">1</span>+<span class="number">1</span><span class="literal">im</span>)/<span class="number">2</span> <span class="number">0</span>;<span class="number">0</span> (<span class="number">1</span>+<span class="number">1</span><span class="literal">im</span>)/<span class="number">2</span> (<span class="number">1</span>-<span class="number">1</span><span class="literal">im</span>)/<span class="number">2</span> <span class="number">0</span>;<span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">1</span>];</span><br><span class="line"><span class="meta">@const_gate</span> stoPhase::ComplexF64 = [<span class="number">1</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span>;<span class="number">0</span> <span class="number">1</span> <span class="number">0</span> <span class="number">0</span>;<span class="number">0</span> <span class="number">0</span> -<span class="number">1</span><span class="literal">im</span> <span class="number">0</span>;<span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">1</span>];</span><br></pre></td></tr></table></figure>
+<p>接下来需要定义做一维链连接过程中所需要历经的各步门操作，如下：</p>
+<figure class="highlight julia"><table><tr><td class="code"><pre><span class="line">nqubit = <span class="number">10</span></span><br><span class="line">circuit = chain(</span><br><span class="line">    nqubit,</span><br><span class="line">    put((<span class="number">1</span>,<span class="number">2</span>)=&gt;sqrtSWAP),</span><br><span class="line">    put((<span class="number">3</span>,<span class="number">4</span>)=&gt;sqrtSWAP),</span><br><span class="line">    put((<span class="number">5</span>,<span class="number">6</span>)=&gt;sqrtSWAP),</span><br><span class="line">    put((<span class="number">7</span>,<span class="number">8</span>)=&gt;sqrtSWAP),</span><br><span class="line">    put((<span class="number">9</span>,<span class="number">10</span>)=&gt;sqrtSWAP),</span><br><span class="line"></span><br><span class="line">    put((<span class="number">1</span>,<span class="number">2</span>)=&gt;stoPhase),</span><br><span class="line">    put((<span class="number">3</span>,<span class="number">4</span>)=&gt;stoPhase),</span><br><span class="line">    put((<span class="number">5</span>,<span class="number">6</span>)=&gt;stoPhase),</span><br><span class="line">    put((<span class="number">7</span>,<span class="number">8</span>)=&gt;stoPhase),</span><br><span class="line">    put((<span class="number">9</span>,<span class="number">10</span>)=&gt;stoPhase),</span><br><span class="line"></span><br><span class="line">    put((<span class="number">2</span>,<span class="number">3</span>)=&gt;sqrtSWAP),</span><br><span class="line">    put((<span class="number">4</span>,<span class="number">5</span>)=&gt;sqrtSWAP),</span><br><span class="line">    put((<span class="number">6</span>,<span class="number">7</span>)=&gt;sqrtSWAP),</span><br><span class="line">    put((<span class="number">8</span>,<span class="number">9</span>)=&gt;sqrtSWAP),</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>定义了各步的连接操作之后，便是定义初态，并应用上述的门操作过程。此时有：</p>
+<figure class="highlight julia"><table><tr><td class="code"><pre><span class="line">state_init = ArrayReg(<span class="string">bit"0101010101"</span>)</span><br><span class="line"></span><br><span class="line">rr = apply!(ArrayReg(<span class="string">bit"0101010101"</span>), circuit)</span><br><span class="line">rr.state</span><br></pre></td></tr></table></figure>
+<p>最后，通过<code>rr.state</code>命令输出的就是，经过上述操作之后的一维纠缠链的末态分布。</p>
+<p>以上，就是使用<code>Yao.jl</code>库来模拟一维纠缠链制备的一个简单示例。</p>
+]]></content>
+      <tags>
+        <tag>Yao.jl</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World --- Hexo入门操作</title>
+    <url>/posts/7132/</url>
+    <content><![CDATA[<p><a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>是目前比较热门的一个静态博客框架。</p>
+<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<a id="more"></a>
+<h2 id="快速入门"><a href="#快速入门" class="headerlink" title="快速入门"></a>快速入门</h2><h3 id="创建一个新帖子"><a href="#创建一个新帖子" class="headerlink" title="创建一个新帖子"></a>创建一个新帖子</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+<p>更多信息，参见: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
+<h3 id="运行服务器"><a href="#运行服务器" class="headerlink" title="运行服务器"></a>运行服务器</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>更多信息，参见: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
+<h3 id="生成静态文件"><a href="#生成静态文件" class="headerlink" title="生成静态文件"></a>生成静态文件</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo generate</span><br></pre></td></tr></table></figure>
+<p>简写形式为</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo g</span><br></pre></td></tr></table></figure>
+<p>更多信息，参见: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
+<h3 id="部署到远程站点"><a href="#部署到远程站点" class="headerlink" title="部署到远程站点"></a>部署到远程站点</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>简写形式为</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo d</span><br></pre></td></tr></table></figure>
+<p>更多信息，参见: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+]]></content>
+      <tags>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>个人博客中添加备案号</title>
+    <url>/posts/24120/</url>
+    <content><![CDATA[<h2 id="在Hexo中添加备案号的方法"><a href="#在Hexo中添加备案号的方法" class="headerlink" title="在Hexo中添加备案号的方法"></a>在Hexo中添加备案号的方法</h2><p>下面以使用Next主题为例，修改位于主题文件夹（/themes/next/layout/_partial）下面的名为footer.swig文件。在其中添加代码片段如下</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&lt;div&gt;</span><br><span class="line">&lt;a href=<span class="string">"http://www.miit.gov.cn/"</span>&gt;皖ICP备xxxxxxxx号&lt;<span class="regexp">/a&gt; 。</span></span><br><span class="line"><span class="regexp">&lt;/</span>div&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="给WordPress非官方主题添加备案号"><a href="#给WordPress非官方主题添加备案号" class="headerlink" title="给WordPress非官方主题添加备案号"></a>给WordPress非官方主题添加备案号</h2><p>由于国家网监局要求，放在国内服务器的网站域名必须全部备案，并且在网页底部添加备案号信息。而WordPress中文版可以很方便的在后台进行添加备案号，但是在后台添加的备案号只会在默认的三个主题中显示生效。为此下面介绍一下给WordPress非官方主题添加备案号的方法。</p>
+]]></content>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>备案</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>第一条👣</title>
+    <url>/posts/56524/</url>
+    <content><![CDATA[<p>在这里的第一条博客，留下的第一个👣！</p>
+<h3 id="平凡，却不甘平淡"><a href="#平凡，却不甘平淡" class="headerlink" title="平凡，却不甘平淡"></a>平凡，却不甘平淡</h3><p>虽生而平凡，却不甘于平淡！记录点滴，望君勿忘！曾几何时，……</p>
+<h3 id="感恩"><a href="#感恩" class="headerlink" title="感恩"></a>感恩</h3><p>感恩，能生于此美好的年代！<br>感恩，没有过早的落后于时代！</p>
+]]></content>
+      <tags>
+        <tag>Test</tag>
+      </tags>
+  </entry>
+</search>
